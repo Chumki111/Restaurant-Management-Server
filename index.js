@@ -34,6 +34,12 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
+    const foodCollection = client.db('Restaurant-Management').collection('foods');
+    // collect top 6 foods
+    app.get('/top-foods',async(req,res) =>{
+      const topFoods = await foodCollection.find().sort({ purchaseCount: -1 }).limit(6).toArray();
+      res.send(topFoods)
+    })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
