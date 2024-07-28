@@ -30,6 +30,7 @@ const client = new MongoClient(process.env.DB_URL, {
 async function run() {
   try {
     const foodCollection = client.db('Restaurant-Management').collection('foods');
+    const galleryCollection = client.db('Restaurant-Management').collection('gallery');
 
     // collect top 6 foods
     app.get('/top-foods', async (req, res) => {
@@ -52,6 +53,12 @@ async function run() {
       const result = await foodCollection.findOne(query);
       res.send(result);
     });
+
+    // get all gallery image
+   app.get('/gallery',async(req,res) =>{
+    const result = await galleryCollection.find().toArray();
+    res.send(result)
+   })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
