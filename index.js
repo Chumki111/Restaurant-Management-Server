@@ -31,7 +31,7 @@ async function run() {
   try {
     const foodCollection = client.db('Restaurant-Management').collection('foods');
     const galleryCollection = client.db('Restaurant-Management').collection('gallery');
-
+    const testimonialCollection=client.db('Restaurant-Management').collection('testimonials')
     // collect top 6 foods
     app.get('/top-foods', async (req, res) => {
       const topFoods = await foodCollection.find().sort({ purchaseCount: -1 }).limit(6).toArray();
@@ -59,7 +59,12 @@ async function run() {
     const result = await galleryCollection.find().toArray();
     res.send(result)
    })
-
+  //  get all testimonial
+  app.get('/testimonials',async(req,res) =>{
+    const result = await testimonialCollection.find().toArray();
+    res.send(result)
+  })
+  
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
