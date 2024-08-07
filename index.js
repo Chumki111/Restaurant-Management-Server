@@ -32,6 +32,7 @@ async function run() {
     const foodCollection = client.db('Restaurant-Management').collection('foods');
     const galleryCollection = client.db('Restaurant-Management').collection('gallery');
     const testimonialCollection=client.db('Restaurant-Management').collection('testimonials')
+    const blogsCollection = client.db('Restaurant-Management').collection('blogs')
     // collect top 6 foods
     app.get('/top-foods', async (req, res) => {
       const topFoods = await foodCollection.find().sort({ purchaseCount: -1 }).limit(6).toArray();
@@ -62,6 +63,11 @@ async function run() {
   //  get all testimonial
   app.get('/testimonials',async(req,res) =>{
     const result = await testimonialCollection.find().toArray();
+    res.send(result)
+  })
+  //  get all testimonial
+  app.get('/blogs',async(req,res) =>{
+    const result = await blogsCollection.find().toArray();
     res.send(result)
   })
   
