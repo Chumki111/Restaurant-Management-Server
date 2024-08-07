@@ -65,11 +65,18 @@ async function run() {
     const result = await testimonialCollection.find().toArray();
     res.send(result)
   })
-  //  get all testimonial
+  //  get all blogs
   app.get('/blogs',async(req,res) =>{
     const result = await blogsCollection.find().toArray();
     res.send(result)
   })
+    // get single blog
+    app.get('/blogs/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await blogsCollection.findOne(query);
+      res.send(result);
+    });
   
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
