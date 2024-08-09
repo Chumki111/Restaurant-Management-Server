@@ -49,6 +49,22 @@ async function run() {
     const galleryCollection = client.db('Restaurant-Management').collection('gallery');
     const testimonialCollection=client.db('Restaurant-Management').collection('testimonials')
     const blogsCollection = client.db('Restaurant-Management').collection('blogs')
+
+    // auth related api
+    app.post("/jwt",async(req,res) =>{
+      const user = req.body;
+      console.log('I need a new user',user);
+      const token  = jwt.sign(user,process.env.ACCESS_TOKEN_SECRET,{
+        expiresIn:'365d'
+      })
+      res
+      .cookie('token',token,{
+   httpOnly:true,
+   secure : process.env.NODE_ENV === 'production',
+   sameSite : process.env.NODE_ENV === 'production' ? 'node' : 'strict'
+      })
+      .send({success : true})
+    })
     // collect top 6 foods
     app.get('/top-foods', async (req, res) => {
       const topFoods = await foodCollection.find().sort({ purchaseCount: -1 }).limit(6).toArray();
