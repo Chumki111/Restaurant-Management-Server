@@ -65,6 +65,20 @@ async function run() {
       })
       .send({success : true})
     })
+    // logout
+    app.get('/logout',async(req,res) =>{
+      try{
+       res.clearCookie('token',{
+        maxAge: 0,
+        secure : process.env.NODE_ENV === 'production',
+   sameSite : process.env.NODE_ENV === 'production' ? 'node' : 'strict'
+       })
+       .send({success : true})
+       console.log('Logout successful');
+      }catch(err){
+        res.status(500).send(err)
+      }
+    })
     // collect top 6 foods
     app.get('/top-foods', async (req, res) => {
       const topFoods = await foodCollection.find().sort({ purchaseCount: -1 }).limit(6).toArray();
