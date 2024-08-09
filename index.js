@@ -49,6 +49,7 @@ async function run() {
     const galleryCollection = client.db('Restaurant-Management').collection('gallery');
     const testimonialCollection=client.db('Restaurant-Management').collection('testimonials')
     const blogsCollection = client.db('Restaurant-Management').collection('blogs')
+    const userCollection = client.db('Restaurant-Management').collection('users')
 
     // auth related api
     app.post("/jwt",async(req,res) =>{
@@ -78,6 +79,25 @@ async function run() {
       }catch(err){
         res.status(500).send(err)
       }
+    })
+    // save user or modify user email, status in db
+    app.put('/users/:email',async(req,res) =>{
+      const email = req.params.email;
+      const user = req.body;
+      const query = {email : email};
+      const options = {upsert : true};
+      const isExist = await userCollection.findOne(query);
+      console.log('User found ---->',isExist);
+      if(isExist) return res.send(isExist);
+      const result  = await userCollection.updateOne(
+        query,
+        {
+          $set : {...user,timestamp: Date.now()}
+        },
+        options
+      )
+      res.send(result)
+
     })
     // collect top 6 foods
     app.get('/top-foods', async (req, res) => {
